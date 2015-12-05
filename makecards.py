@@ -10,12 +10,16 @@ SIZE = 60
 
 
 def CardAgainstHumanity(text, background_color, back, out):
+  modified_text = text.replace("_", "_____")
+  if modified_text[-1] != "." and modified_text[-1] != "!" and modified_text[-1] != "?":
+    modified_text += "."
+  print "Text: %s" % modified_text
   """Writes text onto back, result is in out. color is the background color."""
   text_color = 'white' if background_color == 'black' else 'black'
   text = text.replace('"', '\\"')
   command = ('convert -font %s -pointsize %d -size %dx '
              '-background %s -transparent %s -fill %s "caption:%s" temp.png' % (
-                 FONT, SIZE, TEXT_WIDTH, background_color, background_color, text_color, text.strip()))
+                 FONT, SIZE, TEXT_WIDTH, background_color, background_color, text_color, modified_text.strip()))
   os.system(command)
   command = 'composite -geometry +%d+%d "%s" "%s" "%s"' % (
                 MARGIN, MARGIN, 'temp.png', back, out)
@@ -33,8 +37,7 @@ def main():
   background = sys.argv[1] + ' front.png'
 
   try:
-    outdir = os.path.splitext(os.path.basename(sys.argv[2]))[0]
-    outdir = os.path.splitext(outdir)[0]
+    outdir = "C:\\Users\\Phil\\OneDrive\\CAH cards\\"
     os.mkdir(outdir)
   except OSError: pass
 
